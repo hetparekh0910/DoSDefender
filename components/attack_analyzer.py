@@ -173,7 +173,7 @@ class AttackAnalyzer:
         fig = go.Figure(data=[edge_trace, node_trace],
                        layout=go.Layout(
                            title=f'{config["type"]} Attack Flow on {config["target"]}',
-                           titlefont_size=16,
+                           title_font_size=16,
                            showlegend=False,
                            hovermode='closest',
                            margin=dict(b=20,l=5,r=5,t=40),
