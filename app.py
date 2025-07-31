@@ -8,6 +8,7 @@ from components.attack_vectors import AttackVectors
 from components.impact_analysis import ImpactAnalysis
 from components.timeline_viz import TimelineVisualizer
 from components.educational_resources import EducationalResources
+from components.database_admin import DatabaseAdmin
 
 # Configure page
 st.set_page_config(
@@ -37,7 +38,8 @@ def main():
         "🔍 Attack Vectors": "attack_vectors",
         "💥 Impact Analysis": "impact_analysis",
         "📈 Timeline Visualization": "timeline",
-        "📖 Educational Resources": "education"
+        "📖 Educational Resources": "education",
+        "🗄️ Database Admin": "database_admin"
     }
     
     selected_page = st.sidebar.selectbox("Select Page", list(pages.keys()))
@@ -69,6 +71,8 @@ def main():
         TimelineVisualizer().render()
     elif page_key == "education":
         EducationalResources().render()
+    elif page_key == "database_admin":
+        DatabaseAdmin().render()
 
 def show_dashboard():
     st.header("📊 DoS Attack Analysis Dashboard")

@@ -1,20 +1,47 @@
 """
 DoS Attacks Database - Educational case studies and attack data
-This module contains real-world DoS attack case studies for educational purposes
+This module provides database connectivity and data access for the DoS Analysis Platform
 """
 
 import pandas as pd
 from datetime import datetime, timedelta
 import random
+from database.data_manager import DatabaseManager
 
 class DoSAttackDatabase:
     def __init__(self):
-        self.case_studies = self._load_case_studies()
-        self.attack_vectors = self._load_attack_vectors()
+        self.db_manager = DatabaseManager()
+        # Legacy support - convert database data to original format
+        self.case_studies = self._load_case_studies_from_db()
+        self.attack_vectors = self._load_attack_vectors_from_db()
         self.mitigation_strategies = self._load_mitigation_strategies()
     
-    def _load_case_studies(self):
-        """Load historical DoS attack case studies"""
+    def _load_case_studies_from_db(self):
+        """Load case studies from database"""
+        db_case_studies = self.db_manager.get_all_case_studies()
+        case_studies = []
+        
+        for case in db_case_studies:
+            case_dict = {
+                'id': case.id,
+                'name': case.name,
+                'date': case.date.strftime('%Y-%m-%d'),
+                'target': case.target,
+                'attack_type': case.attack_type,
+                'peak_traffic': case.peak_traffic,
+                'duration': case.duration,
+                'attack_vectors': case.attack_vectors,
+                'impact': case.impact,
+                'mitigation': case.mitigation,
+                'lessons_learned': case.lessons_learned,
+                'technical_details': case.technical_details
+            }
+            case_studies.append(case_dict)
+        
+        return case_studies
+    
+    def _load_case_studies_legacy(self):
+        """Legacy method - kept for fallback"""
         return [
             {
                 'id': 'case_001',
@@ -138,7 +165,36 @@ class DoSAttackDatabase:
             }
         ]
     
-    def _load_attack_vectors(self):
+    def _load_attack_vectors_from_db(self):
+        """Load attack vectors from database"""
+        db_vectors = self.db_manager.get_all_attack_vectors()
+        
+        # If no vectors in database, return legacy format
+        if not db_vectors:
+            return self._load_attack_vectors_legacy()
+        
+        # Convert database format to legacy format for compatibility
+        attack_vectors = {}
+        for vector in db_vectors:
+            category = vector.category.lower()
+            if category not in attack_vectors:
+                attack_vectors[category] = {
+                    'name': f'{vector.category} Attacks',
+                    'description': f'Attacks that fall under the {vector.category.lower()} category',
+                    'subcategories': []
+                }
+            
+            subcategory = {
+                'name': vector.name,
+                'description': vector.description,
+                'characteristics': vector.technical_details.get('characteristics', []) if vector.technical_details else [],
+                'mitigation': vector.mitigation_strategies if vector.mitigation_strategies else []
+            }
+            attack_vectors[category]['subcategories'].append(subcategory)
+        
+        return attack_vectors
+    
+    def _load_attack_vectors_legacy(self):
         """Load detailed attack vector information"""
         return {
             'volumetric': {
