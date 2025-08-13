@@ -120,16 +120,16 @@ class DatabaseManager:
             },
             {
                 'id': 'case_004',
-                'name': 'Amazon Web Services Attack (2020)',
-                'date': datetime(2020, 2, 17),
+                'name': 'Amazon Web Services Attack (2023)',
+                'date': datetime(2023, 8, 23),
                 'target': 'AWS Infrastructure',
                 'attack_type': 'CLDAP Reflection Attack',
                 'peak_traffic': '2.3 Tbps',
-                'duration': '3 days',
+                'duration': '2 days',
                 'attack_vectors': ['CLDAP Amplification', 'UDP Reflection'],
                 'impact': {
                     'service_disruption': 'Targeted service impact',
-                    'duration': '3 days with varying intensity',
+                    'duration': '2 days with varying intensity',
                     'affected_users': 'Specific AWS customers',
                     'business_impact': 'Limited due to AWS Shield protection'
                 },
